@@ -7,6 +7,11 @@ import random
 import requests
 from requests import get
 import socket
+import wikipedia
+import webbrowser
+import pywhatkit as kit
+import smtplib
+import sys
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -42,10 +47,18 @@ def wish():
         speak("Good Evening")
     speak("I am Jarvis , how can i help you")
 
+def sendEmail(to,content):
+    server=smtplib.SMTP("smtp.gmail.com",587)
+    server.ehlo()
+    server.starttls()
+    server.login("palakmehta030@gmail.com","arihant1")
+    server.sendmail("palakmehta030@gmail.com",to,content)
+    server.close()
+
 if __name__=="__main__":
     wish()
-    # while True:
-    if 1:
+    while True:
+    # if 1:
         query = takecommand().lower()
 
         if "open notepad" in query:
@@ -84,4 +97,50 @@ if __name__=="__main__":
 
         
     # takecommand()
-    # speak("Hello there, What can I do for you")
+    # speak("Hello there, What can I do for you") 
+        
+        elif "wikipedia" in query:
+            speak("searching wikipedia....")
+            query=query.replace("wikipedia","")
+            results=wikipedia.summary(query,sentences=2)
+            speak("according to wikipedia")
+            speak(results)
+            
+        elif "open youtube" in query:
+            webbrowser.open("www.youtube.com")
+
+        elif "open facebook" in query:
+            webbrowser.open("www.facebook.com")
+
+        elif "open stackoverflow" in query:
+            webbrowser.open("www.stackoverflow.com")   
+
+        elif "open google" in query:
+            speak("sir,what should i search on google")
+            cm=takecommand().lower()
+            webbrowser.open(f"{cm}") 
+
+        elif "send message" in query:
+            kit.sendwhatmsg("+917582897416","How you doin'?",20,59)
+
+        elif "play song on youtube" in query:
+            kit.playonyt("Perfect")
+
+        elif "email to mayuri" in query:
+            try:
+                speak("What should i say?")
+                content=takecommand().lower()
+                to="patidarmayuri27@gmail.com"
+                sendEmail(to,content)
+                speak("email has been sent to mayuri")
+
+            except Exception as e:
+                print(e)
+                speak("sorry sir, i am not able to send this mail to mayuri")
+
+        elif "no thanks" in query:
+            speak("thanks for using me sir,have a good day")
+            sys.exit()
+
+
+        speak("sir,do you have any other work")

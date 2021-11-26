@@ -56,6 +56,21 @@ def sendEmail(to,content):
     server.sendmail("patidarmayuri27@gmail.com",to,content)
     server.close()
 
+def news():
+    main_url='http://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=36e001fb0f524f7ea59b5faaffbe0300'
+
+    main_page=requests.get(main_url).json()
+    #print(main_page)
+    articles=main_page["articles"]
+    #print(articles)
+    head=[]
+    day=["first","second","third","fourth","fifth"]
+    for ar in articles:
+        head.append(ar["title"])
+    for i in range (len(day)):
+        #print (f"today's {day[i]} news is: ",head[i])
+        speak(f"today's {day[i]} news is:{head[i]}")
+
 if __name__=="__main__":
     wish()
     while True:
@@ -163,3 +178,72 @@ if __name__=="__main__":
         elif "sleep the system" in query:
             os.system("rundl132.exe powrprof dil,SetSuspendState 0,1,0")
         
+        elif "switch the window" in query:
+            pyautogui.keyDown("alt")
+            pyautogui.press('tab')
+            time.sleep(1)
+            pyautogui.keyUp("alt")
+
+        elif "tell me news" in query:
+            speak("please wait sir,fetching the latest news")
+            news()
+
+        elif "email to avinash" in query:
+            speak("sir what should i say")
+            query=takecommand().lower()
+            if "send a file" in query:
+                email=''
+                password=''
+                send_to_email='palakmehta030@gmail.com'
+                speak("okay sir,what is the subject for this email")
+                query=takecommand().lower()
+                subject=query
+                speak("and sir,what is the message for this email")
+                query2=takecommand().lower()
+                message=query2
+                speak("sir please enter the correct path of file in shell")
+                file_location=input("Please enter the path here")
+                speak("Please wait, i am sending email now")
+
+                msg=MIMEMultipart()
+                msg['From']=email
+                msg['To']=send_to_email
+                msg['Subject']=subject
+
+                msg.attach(MIMEText(message,'plain'))
+
+                #Setup the attachment
+                filename=os.path.basename(file_location)
+                attachment=open(file_location,"rb")
+                part=MIMEBase('application','octet-stream')
+                part.set_payload(attachment.read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition',"attachment; filename=%s" % filename)
+
+                # Attach the attachment to MIMEMultipart object
+                msg.attach(part)
+
+                server=smtplib
+                server=smtplib.SMTP("smtp.gmail.com",587)
+                server.starttls()
+                server.login(email,password)
+                text=msg.as_string()
+                server.sendmail(email,send_to_email,text)
+                server.quit()
+                speak("email has been sent to avinash")
+
+            else:
+                email=''
+                password=''
+                send_to_email='palakmehta030@gmail.com'
+                message=query
+
+                server=smtplib.SMTP("smtp.gmail.com",587)
+                server.starttls()
+                server.login(email,password)
+                server.sendmail(email,send_to_email,text)
+                server.quit()
+                speak("email has been sent to avinash")
+
+
+                

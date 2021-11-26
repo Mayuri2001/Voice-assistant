@@ -12,6 +12,7 @@ import webbrowser
 import pywhatkit as kit
 import smtplib
 import sys
+import pyjokes
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -51,8 +52,8 @@ def sendEmail(to,content):
     server=smtplib.SMTP("smtp.gmail.com",587)
     server.ehlo()
     server.starttls()
-    server.login("palakmehta030@gmail.com","arihant1")
-    server.sendmail("palakmehta030@gmail.com",to,content)
+    server.login("patidarmayuri27@gmail.com","k_meenu_11")
+    server.sendmail("patidarmayuri27@gmail.com",to,content)
     server.close()
 
 if __name__=="__main__":
@@ -126,11 +127,11 @@ if __name__=="__main__":
         elif "play song on youtube" in query:
             kit.playonyt("Perfect")
 
-        elif "email to mayuri" in query:
+        elif "email to palak" in query:
             try:
                 speak("What should i say?")
                 content=takecommand().lower()
-                to="patidarmayuri27@gmail.com"
+                to="palakmehta030@gmail.com"
                 sendEmail(to,content)
                 speak("email has been sent to mayuri")
 
@@ -142,5 +143,23 @@ if __name__=="__main__":
             speak("thanks for using me sir,have a good day")
             sys.exit()
 
+        elif "close notepad" in query:
+            speak("okay sir, closing notepad")
+            os.system("taskkill /f /im notepad.exe")
 
-        speak("sir,do you have any other work")
+        elif "set alarm" in query:
+            nn=int(datetime.datetime.now().hour)
+            if nn==22:
+                music_dir='C:\\songs'
+                songs = os.listdir(music_dir)
+                os.startfile(os.path.join(music_dir,songs[0]))
+        elif "tell me a joke" in query:
+            joke = pyjokes.get_joke()
+            speak(joke)
+        elif "shut down the system" in query:
+            os.system("shutdown /r /t s")
+        elif "restart the system" in query:
+            os.system("shutdown /r /t s")
+        elif "sleep the system" in query:
+            os.system("rundl132.exe powrprof dil,SetSuspendState 0,1,0")
+        

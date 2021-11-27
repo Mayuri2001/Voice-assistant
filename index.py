@@ -21,6 +21,8 @@ import pyjokes
 import pyautogui
 import email_to
 import instaloader
+import PyPDF2
+
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -88,6 +90,17 @@ def news():
     for i in range (len(day)):
         #print (f"today's {day[i]} news is: ",head[i])
         speak(f"today's {day[i]} news is:{head[i]}")
+
+def pdf_reader():
+    book=open('windows_os.pdf','rb')
+    pdfReader=PyPDF2.PdfFileReader(book)
+    pages=pdfReader.numPages
+    speak(f"Total number of pages in this book {pages}")
+    speak("sir please enter the page number i have to read")
+    pg=int(input("Please enter the page number: "))
+    page=pdfReader.getPage(pg)
+    text=page.extractText()
+    speak(text)
 
 if __name__=="__main__":
     wish()
@@ -307,4 +320,21 @@ if __name__=="__main__":
             time.sleep(3)
             img = pyautogui.screenshot()
             img.save(f"{name}.png")
-            speak("i am done sir, the screenshot is saved in our main folder");
+            speak("i am done sir, the screenshot is saved in our main folder")
+
+        elif "read pdf" in query:
+            pdf_reader()
+
+        elif "hide all files" in query or "hide this folder" in query or "visible for everyone" in query:
+            speak("sir please tell me u want to hide this folfer or make it visible for everyone")
+            condition=takecommand().lower()
+            if "hide" in condition:
+                os.system("attrib +h /s /d")
+                speak("sir,all the files in this folder are now hidden")
+
+            elif "visible" in condition:
+                os.system("attrib -h /s /d")
+                speak("Sir all the files in this folder are now visible to everyone")
+
+            elif "leave it" in condition or "leave for now" in condition:
+                speak("ok sir") 

@@ -1,3 +1,4 @@
+import time
 import pyttsx3
 import speech_recognition as sr
 import datetime
@@ -11,8 +12,14 @@ import wikipedia
 import webbrowser
 import pywhatkit as kit
 import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.MIMEBase import MIMEBase
+from email import encoders
 import sys
 import pyjokes
+import pyautogui
+import email_to
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -55,6 +62,18 @@ def sendEmail(to,content):
     server.login("patidarmayuri27@gmail.com","k_meenu_11")
     server.sendmail("patidarmayuri27@gmail.com",to,content)
     server.close()
+
+def news():
+    main_url="http://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=8278dad38c6348e9855fe64f71b1919c"
+    main_page = requests.get(main_url).json()
+    articles = main_page["articles"]
+
+    head=[]
+    day=["first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"]
+    for ar in articles:
+        head.append(ar["title"])
+    for i in range(len(day)):
+        speak(f"today's {day[i]} news is: {head[i]}")
 
 if __name__=="__main__":
     wish()
@@ -127,17 +146,17 @@ if __name__=="__main__":
         elif "play song on youtube" in query:
             kit.playonyt("Perfect")
 
-        elif "email to palak" in query:
-            try:
-                speak("What should i say?")
-                content=takecommand().lower()
-                to="palakmehta030@gmail.com"
-                sendEmail(to,content)
-                speak("email has been sent to mayuri")
+        # elif "email to palak" in query:
+        #     try:
+        #         speak("What should i say?")
+        #         content=takecommand().lower()
+        #         to="palakmehta030@gmail.com"
+        #         sendEmail(to,content)
+        #         speak("email has been sent to mayuri")
 
-            except Exception as e:
-                print(e)
-                speak("sorry sir, i am not able to send this mail to mayuri")
+        #     except Exception as e:
+        #         print(e)
+        #         speak("sorry sir, i am not able to send this mail to mayuri")
 
         elif "no thanks" in query:
             speak("thanks for using me sir,have a good day")
@@ -162,4 +181,68 @@ if __name__=="__main__":
             os.system("shutdown /r /t s")
         elif "sleep the system" in query:
             os.system("rundl132.exe powrprof dil,SetSuspendState 0,1,0")
+        elif "switch the window" in query:
+            pyautogui.keyDown("alt")
+            pyautogui.press("tab")
+            time.sleep(1)
+            pyautogui.keyUp("alt")
         
+        elif "tell me the news" in query:
+            speak("please wait sir, fetching the latest news")
+            news()
+
+        elif "email to palak" in query:
+
+            speak("sir what should i say")
+            query = takecommand().lower()
+            if "send a file" in query:
+                email = "patidarmayuri27@gmail.com"
+                password = "k_meenu_11"
+                send_to_email = "palakmehta030@gmail.com"
+                speak("okay sir, what is the subject for this email")
+                query = takecommand().lower()
+                subject = query
+                speak("and sir, what is the message for this email")
+                query2 = takecommand().lower()
+                message = query2
+                speak("sir please enter the correct path of the file into the shell")
+                file_location = input("please enter the path here")
+
+                speak("please wait, i am sending email now")
+
+                msg = MIMEMultipart()
+                msg['From'] = email
+                msg['To'] = send_to_email
+                msg['Subject'] = subject
+
+                msg.attach(MIMEText(message,'plain'))
+
+                filename = os.path.basename(file_location)
+                attachment = open(file_location,"rb")
+                part = MIMEBase('application','octet-stream')
+                part.set_payload(attachment.read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition',"attachment; filename=%s" % filename)
+
+                msg.attach(part)
+
+                server = smtplib.SMTP('smtp.gmail.com',587)
+                server.starttls()
+                server.login(email,password)
+                text = msg.as_string()
+                server.sendmail(email,send_to_email,message)
+                server.quit()
+                speak("email has been sent")
+            else:
+                email = "patidarmayuri27@gmail.com"
+                password = "k_meenu_11"
+                send_to_email = "palakmehta030@gmail.com"
+                message = query 
+
+                server = smtplib.SMTP('smtp.gmail.com',587)
+                server.starttls()
+                server.login(email,password)
+                server.sendmail(email,send_to_email,message)
+                server.quit()
+                speak("email has been sent")
+

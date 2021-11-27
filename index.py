@@ -74,6 +74,19 @@ def news():
         head.append(ar["title"])
     for i in range(len(day)):
         speak(f"today's {day[i]} news is: {head[i]}")
+    main_url='http://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=36e001fb0f524f7ea59b5faaffbe0300'
+
+    main_page=requests.get(main_url).json()
+    #print(main_page)
+    articles=main_page["articles"]
+    #print(articles)
+    head=[]
+    day=["first","second","third","fourth","fifth"]
+    for ar in articles:
+        head.append(ar["title"])
+    for i in range (len(day)):
+        #print (f"today's {day[i]} news is: ",head[i])
+        speak(f"today's {day[i]} news is:{head[i]}")
 
 if __name__=="__main__":
     wish()
@@ -190,36 +203,46 @@ if __name__=="__main__":
         elif "tell me the news" in query:
             speak("please wait sir, fetching the latest news")
             news()
+            
+        elif "switch the window" in query:
+            pyautogui.keyDown("alt")
+            pyautogui.press('tab')
+            time.sleep(1)
+            pyautogui.keyUp("alt")
+
+        elif "tell me news" in query:
+            speak("please wait sir,fetching the latest news")
+            news()
 
         elif "email to palak" in query:
-
             speak("sir what should i say")
-            query = takecommand().lower()
+            query=takecommand().lower()
             if "send a file" in query:
-                email = "patidarmayuri27@gmail.com"
-                password = "k_meenu_11"
-                send_to_email = "palakmehta030@gmail.com"
-                speak("okay sir, what is the subject for this email")
-                query = takecommand().lower()
-                subject = query
-                speak("and sir, what is the message for this email")
-                query2 = takecommand().lower()
-                message = query2
-                speak("sir please enter the correct path of the file into the shell")
-                file_location = input("please enter the path here")
+                email='patidarmayuri27@gmail.com'
+                password='k_meenu_11'
+                send_to_email='palakmehta030@gmail.com'
+                speak("okay sir,what is the subject for this email")
+                query=takecommand().lower()
+                subject=query
+                speak("and sir,what is the message for this email")
+                query2=takecommand().lower()
+                message=query2
+                speak("sir please enter the correct path of file in shell")
+                file_location=input("Please enter the path here")
 
-                speak("please wait, i am sending email now")
+                speak("Please wait, i am sending email now")
 
-                msg = MIMEMultipart()
-                msg['From'] = email
-                msg['To'] = send_to_email
-                msg['Subject'] = subject
+                msg=MIMEMultipart()
+                msg['From']=email
+                msg['To']=send_to_email
+                msg['Subject']=subject
 
                 msg.attach(MIMEText(message,'plain'))
 
-                filename = os.path.basename(file_location)
-                attachment = open(file_location,"rb")
-                part = MIMEBase('application','octet-stream')
+                #Setup the attachment
+                filename=os.path.basename(file_location)
+                attachment=open(file_location,"rb")
+                part=MIMEBase('application','octet-stream')
                 part.set_payload(attachment.read())
                 encoders.encode_base64(part)
                 part.add_header('Content-Disposition',"attachment; filename=%s" % filename)
@@ -245,4 +268,3 @@ if __name__=="__main__":
                 server.sendmail(email,send_to_email,message)
                 server.quit()
                 speak("email has been sent")
-

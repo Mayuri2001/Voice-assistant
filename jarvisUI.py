@@ -14,17 +14,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1367, 929)
+        MainWindow.resize(1204, 755)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.jarvis = QtWidgets.QLabel(self.centralwidget)
-        self.jarvis.setGeometry(QtCore.QRect(0, -10, 1391, 1041))
+        self.jarvis.setGeometry(QtCore.QRect(-50, 0, 1251, 821))
         self.jarvis.setText("")
         self.jarvis.setPixmap(QtGui.QPixmap("7LP8.gif"))
         self.jarvis.setScaledContents(True)
         self.jarvis.setObjectName("jarvis")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(1010, 840, 141, 41))
+        self.pushButton.setGeometry(QtCore.QRect(870, 660, 141, 41))
         font = QtGui.QFont()
         font.setFamily("MS Serif")
         font.setPointSize(14)
@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet("background-color: rgb(0, 0, 255);")
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(1180, 840, 141, 41))
+        self.pushButton_2.setGeometry(QtCore.QRect(1030, 660, 141, 41))
         font = QtGui.QFont()
         font.setFamily("MS Serif")
         font.setPointSize(14)
@@ -44,21 +44,29 @@ class Ui_MainWindow(object):
         self.pushButton_2.setStyleSheet("background-color: rgb(255, 0, 0);")
         self.pushButton_2.setObjectName("pushButton_2")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(0, -30, 391, 221))
+        self.label_2.setGeometry(QtCore.QRect(0, -10, 361, 211))
         self.label_2.setText("")
         self.label_2.setPixmap(QtGui.QPixmap("T8bahf.gif"))
         self.label_2.setScaledContents(True)
         self.label_2.setObjectName("label_2")
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(520, 40, 256, 41))
-        self.textBrowser.setStyleSheet("font-size:30px;background:transparent;color:white;border:none;")
+        self.textBrowser.setStyleSheet("background:transpent;\n"
+"font color:white;\n"
+"border:none;\n"
+"font-size:40px;\n"
+"")
         self.textBrowser.setObjectName("textBrowser")
         self.textBrowser_2 = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser_2.setGeometry(QtCore.QRect(800, 40, 256, 41))
-        self.textBrowser_2.setStyleSheet("font-size:30px;background:transparent;color:white;border:none;")
+        self.textBrowser_2.setStyleSheet("background:transpent;\n"
+"font color:white;\n"
+"border:none;\n"
+"font-size:20px;\n"
+"")
         self.textBrowser_2.setObjectName("textBrowser_2")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(1010, 610, 311, 171))
+        self.label_3.setGeometry(QtCore.QRect(870, 450, 311, 171))
         self.label_3.setText("")
         self.label_3.setPixmap(QtGui.QPixmap("3974576 (1).jpg"))
         self.label_3.setScaledContents(True)

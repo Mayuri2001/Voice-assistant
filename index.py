@@ -37,8 +37,6 @@ voices = engine.getProperty('voices')
 
 engine.setProperty('voices',voices[0].id)
 
-engine.say('Bolne lagi. Mera yasu yasu, mera yasu yasu')
-
 
 
 
@@ -80,15 +78,12 @@ def news():
     main_url='http://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=36e001fb0f524f7ea59b5faaffbe0300'
 
     main_page=requests.get(main_url).json()
-    #print(main_page)
     articles=main_page["articles"]
-    #print(articles)
     head=[]
     day=["first","second","third","fourth","fifth"]
     for ar in articles:
         head.append(ar["title"])
     for i in range (len(day)):
-        #print (f"today's {day[i]} news is: ",head[i])
         speak(f"today's {day[i]} news is:{head[i]}")
 
 def pdf_reader():
@@ -101,22 +96,6 @@ def pdf_reader():
     page=pdfReader.getPage(pg)
     text=page.extractText()
     speak(text)
-
-# def takecommand():
-#         r = sr.Recognizer()
-#         with sr.Microphone() as source:
-#             print("listening...")
-#             r.pause_threshold = 1
-#             audio = r.listen(source,timeout=1,phrase_time_limit=5)
-#         try:
-#             print("Recognizing...")
-#             query = r.recognize_google(audio, language='en-in')
-#             print(f"user said: {query}")
-#         except Exception as e:
-#             speak("Say that again please...")
-#             return "none"
-#         # query = query.lower()
-#         return query
 
 
 class MainThread(QThread):
@@ -137,7 +116,7 @@ class MainThread(QThread):
             query = r.recognize_google(audio, language='en-in')
             print(f"user said: {query}")
         except Exception as e:
-            speak("Say that again please...")
+            speak("No Input Please Speak something ")
             return "none"
         # query = query.lower()
         return query
@@ -178,9 +157,7 @@ class MainThread(QThread):
                         if song.endswith ('.mp3'):
                             os.startfile(os.path.join(music_dir,rd))
                 
-                # elif "ip address" in query:
-                #     ipa = get('https://api.ipify.org').text
-                #     speak(f"your IP adress is {ipa}")
+
 
                 elif "ip address" in query:
                     hostname = socket.gethostname()
@@ -188,9 +165,6 @@ class MainThread(QThread):
                     speak(f"your computer name is:{hostname}")
                     speak(f"your computer IP Address is:{IPAddr}")
 
-                
-            # takecommand()
-            # speak("Hello there, What can I do for you") 
                 
                 elif "wikipedia" in query:
                     speak("searching wikipedia....")
@@ -219,19 +193,8 @@ class MainThread(QThread):
                 elif "play song on youtube" in query:
                     kit.playonyt("Perfect")
 
-                # elif "email to palak" in query:
-                #     try:
-                #         speak("What should i say?")
-                #         content=takecommand().lower()
-                #         to="palakmehta030@gmail.com"
-                #         sendEmail(to,content)
-                #         speak("email has been sent to mayuri")
 
-                #     except Exception as e:
-                #         print(e)
-                #         speak("sorry sir, i am not able to send this mail to mayuri")
-
-                elif "you can go to sleep" or "okay,bye" in query:
+                elif "ok bye" in query:
                     speak("thanks for using me sir,have a good day")
                     sys.exit()
 
@@ -384,6 +347,8 @@ class MainThread(QThread):
 
                     elif "leave it" in condition or "leave for now" in condition:
                         speak("ok sir") 
+                else :
+                    speak("sorry, Invalid Command")
 
 startExecution = MainThread()        
 class Main(QMainWindow):

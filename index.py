@@ -1,5 +1,6 @@
 import time
 import pyttsx3
+from pywikihow import WikiHow
 import speech_recognition as sr
 import datetime
 import os
@@ -38,8 +39,6 @@ voices = engine.getProperty('voices')
 
 engine.setProperty('voices',voices[0].id)
 #engine.setProperty('rate',100)
-
-engine.say('Bolne lagi. Mera yasu yasu, mera yasu yasu')
 
 def speak(audio):
     engine.say(audio)
@@ -146,7 +145,6 @@ class MainThread(QThread):
          
         
     def TaskExecution(self):
-
         if __name__=="__main__":
             wish()
             while True:
@@ -154,6 +152,7 @@ class MainThread(QThread):
                 query = self.takecommand().lower()
 
                 print (query)
+                
                 if "open notepad" in query:
                     npath = "C:\\WINDOWS\\system32\\notepad.exe"
                     os.startfile(npath)
@@ -177,8 +176,6 @@ class MainThread(QThread):
                     for song in songs:
                         if song.endswith ('.mp3'):
                             os.startfile(os.path.join(music_dir,rd))
-                
-
 
                 elif "ip address" in query:
                     hostname = socket.gethostname()
@@ -215,8 +212,8 @@ class MainThread(QThread):
                     kit.playonyt("Perfect")
 
 
-                elif "ok bye" in query:
-                    speak("thanks for using me sir,have a good day")
+                elif "you can sleep now" in query:
+                    speak("Ohk, you can call me anytime.")
                     sys.exit()
 
                 elif "close notepad" in query:
@@ -371,7 +368,7 @@ class MainThread(QThread):
                 
 
                 elif "hello" in query or "hey" in query:
-                    speak("Hello sir,may i help you with something")
+                    speak("Hello sir,may i help you with something") 
 
                 elif "how are you" in query:
                     speak("i am fine sir,what about you")
@@ -397,7 +394,7 @@ class MainThread(QThread):
                 elif "activate how to do mode" in query:
                     from pywikihow import search_wikihow
                     speak("How to do mode is activated please tell me what you want to know")
-                    how=takecommand().lower()
+                    how=self.takecommand().lower()
                     max_results=1
                     how_to=search_wikihow(how,max_results)
                     assert len(how_to)==1
@@ -405,6 +402,17 @@ class MainThread(QThread):
                     speak(how_to[0].summary)
                 else :
                     speak("sorry, Invalid Command")
+
+    # if __name__=="__main__":
+    #     while True:
+    #         permission = takecommand()
+            
+    #         if "wake up" in permission:
+    #             TaskExecution()
+    #         elif "goodbye" in permission:
+    #             speak("thanks for using me sir, have a good day")
+    #             sys.exit()
+
 startExecution = MainThread()        
 class Main(QMainWindow):
         def __init__(self):
@@ -416,10 +424,10 @@ class Main(QMainWindow):
 
         def startTask(self):
             speak('')
-            self.ui.movie = QtGui.QMovie("C:\\Users\\Hp\\Desktop\\project\\7LP8.gif")
+            self.ui.movie = QtGui.QMovie("./7LP8.gif")
             self.ui.jarvis.setMovie(self.ui.movie)
             self.ui.movie.start()
-            self.ui.movie = QtGui.QMovie("C:\\Users\\Hp\\Desktop\\project\\T8bahf.gif")
+            self.ui.movie = QtGui.QMovie("./T8bahf.gif")
             self.ui.label_2.setMovie(self.ui.movie)
             self.ui.movie.start()
             timer = QTimer(self)

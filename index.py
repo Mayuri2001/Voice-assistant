@@ -30,17 +30,16 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 from jarvisUI import Ui_MainWindow
+from bs4 import BeautifulSoup
 
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 
 engine.setProperty('voices',voices[0].id)
+#engine.setProperty('rate',100)
 
 engine.say('Bolne lagi. Mera yasu yasu, mera yasu yasu')
-
-
-
 
 def speak(audio):
     engine.say(audio)
@@ -102,6 +101,9 @@ def pdf_reader():
     text=page.extractText()
     speak(text)
 
+def search_wikihow(query,max_results=10,lang='en'):
+    return list(WikiHow.search(query,max_results,lang))
+
 # def takecommand():
 #         r = sr.Recognizer()
 #         with sr.Microphone() as source:
@@ -147,6 +149,7 @@ class MainThread(QThread):
          
         
     def TaskExecution(self):
+
         if __name__=="__main__":
             wish()
             while True:
@@ -385,6 +388,40 @@ class MainThread(QThread):
                     elif "leave it" in condition or "leave for now" in condition:
                         speak("ok sir") 
 
+                elif "hello" in query or "hey" in query:
+                    speak("Hello sir,may i help you with something")
+
+                elif "how are you" in query:
+                    speak("i am fine sir,what about you")
+
+                elif "also good" in query or "fine" in query:
+                    speak("that is great to hear from you")
+
+                elif "thankyou" in query or "thanks" in query:
+                    speak("it's my pleasure sir")
+
+                elif "You can sleep now" in query or "sleep now" in query:
+                    speak("okay sir,i am going to sleep, you can call me anytime")
+                    break
+                
+                elif "temperature" in query:
+                    search="temperature in indore"
+                    url=f"https://www.google.com/search?q={search}"
+                    r=requests.get(url)
+                    data=BeautifulSoup(r.text,"html.parser")
+                    temp=data.find("div",class_="BNeawe").text
+                    speak(f"current {search} is {temp}")
+
+                elif "activate how to do mode" in query:
+                    from pywikihow import search_wikihow
+                    speak("How to do mode is activated please tell me what you want to know")
+                    how=takecommand().lower()
+                    max_results=1
+                    how_to=search_wikihow(how,max_results)
+                    assert len(how_to)==1
+                    how_to[0].print()
+                    speak(how_to[0].summary)
+
 startExecution = MainThread()        
 class Main(QMainWindow):
         def __init__(self):
@@ -418,4 +455,4 @@ class Main(QMainWindow):
 app = QApplication(sys.argv)
 jarvis = Main()
 jarvis.show()
-exit(app.exec_())
+exit(app.exec_()) 

@@ -38,6 +38,7 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 
 engine.setProperty('voices',voices[0].id)
+engine.setProperty('rate', 170)
 #engine.setProperty('rate',100)
 
 def speak(audio):
@@ -122,8 +123,12 @@ class MainThread(QThread):
         super(MainThread,self).__init__()
 
     def run(self):
-        self.TaskExecution()
-    
+        # self.TaskExecution()
+        speak("please say wakeup to continue")
+        while True:
+            self.query = self.takecommand()
+            if"wake up" in self.query or "are you there" in self.query:
+                self.TaskExecution()
     def takecommand(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
@@ -213,7 +218,11 @@ class MainThread(QThread):
 
 
                 elif "you can sleep now" in query:
-                    speak("Ohk, you can call me anytime.")
+                    speak("Ok, you can call me anytime.")
+                    break;
+                    # sys.exit()
+                elif "ok bye" in query or "thanks for helping" in query:
+                    speak("Thanks for using me sir, have a good day")
                     sys.exit()
 
                 elif "close notepad" in query:
@@ -400,6 +409,32 @@ class MainThread(QThread):
                     assert len(how_to)==1
                     how_to[0].print()
                     speak(how_to[0].summary)
+                
+                elif "how much power is left" in query or "battery" in query:
+                    import psutil
+                    battery = psutil.sensors_battery()
+                    percentage = battery.percent
+                    speak(f"sir our system have {percentage} percent battery")
+                    if percentage >=75:
+                        speak("we have enoughr power to continue our work")
+                    elif percentage>=40 and percentage<=75:
+                        speak("we should connect our system to charging point to charge our battery")
+                    elif percentage>=15 and percentage<=30:
+                        speak("we dont have enough power to work, please connect to charging")
+                    elif percentage<=15:
+                        speak("we have very low power, please connect to charging the system will shutdown very soon")
+
+                elif "internet speed" in query:
+                    import speedtest
+                    st = speedtest.Speedtest()
+                    dl = st.download()
+                    up = st.upload()
+                    speak(f"sir we have {dl} bit per second downloading speed and {up} bit per second uploading speed")
+                    # try:
+                    #     os.system('cmd /k "speedtest"')
+                    # except:
+                    #     speak("there is no internet connection")
+
                 else :
                     speak("sorry, Invalid Command")
 

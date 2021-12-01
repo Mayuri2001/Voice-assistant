@@ -32,12 +32,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 from jarvisUI import Ui_MainWindow
 from bs4 import BeautifulSoup
+import twilio
 
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 
-engine.setProperty('voices',voices[0].id)
+engine.setProperty('voice',voices[1].id)
 engine.setProperty('rate', 170)
 #engine.setProperty('rate',100)
 
@@ -210,7 +211,7 @@ class MainThread(QThread):
                     cm=self.takecommand().lower()
                     webbrowser.open(f"{cm}") 
 
-                elif "send message" in query:
+                elif "send whatsapp message" in query:
                     kit.sendwhatmsg("+917582897416","How you doin'?",20,59)
 
                 elif "play song on youtube" in query:
@@ -434,7 +435,56 @@ class MainThread(QThread):
                     #     os.system('cmd /k "speedtest"')
                     # except:
                     #     speak("there is no internet connection")
+                
+                elif  "send message" in query:
+                   
+                    from twilio.rest import Client
+                    account_sid = 'ACbde677cb2197ffee46ada485124a3405'
+                    auth_token = '575ea37cfdaa2c24b01e6888756c07dd'
+                    client = Client(account_sid, auth_token)
 
+                    message = client.messages \
+                        .create(
+                            body='This is a testing message...',
+                            from_='+19152219104',
+                            to='8982504622'
+                        )
+
+                    print(message.sid) 
+
+                elif "make a call" in query:
+                    from twilio.rest import Client
+                    account_sid = 'ACbde677cb2197ffee46ada485124a3405'
+                    auth_token = '575ea37cfdaa2c24b01e6888756c07dd'
+                    client = Client(account_sid, auth_token)
+
+                    message = client.calls \
+                        .create(
+                            body='This is a testing message...',
+                            from_='+19152219104',
+                            to='8982504622'
+                        )
+
+                    print(message.sid) 
+
+                elif "volume up" in query:
+                    pyautogui.press("volumeup")
+
+                elif "volume mute" in query or "mute" in query:
+                    pyautogui.press("volumemute")
+
+                elif "volume down" in query:
+                    pyautogui.press("volumedown")
+              
+                elif "alarm" in query:
+                    speak("Sir please tell me the time to set alarm, for example, set alarm to 5:30 am")
+                    tt=takecommand().lower()
+                    tt=tt.replace("set set alarm to ", "")
+                    tt=tt.replace(",","")
+                    tt=tt.upper()
+                    import MyAlarm
+                    MyAlarm.alarm(tt)
+                    
                 else :
                     speak("sorry, Invalid Command")
 
